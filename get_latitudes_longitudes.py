@@ -22,6 +22,8 @@ def store_latitudes_longitudes():
     df.to_csv("locations_with_latitudes_longitudes.csv", index=False)
     time.sleep(1)
 
+store_latitudes_longitudes()
+
 
 df = pd.read_csv("locations_with_latitudes_longitudes.csv")
 dict = {}
@@ -33,8 +35,16 @@ for index, row in df.iterrows():
 
 print(dict)
 
+
+geolocator = Nominatim(user_agent="cluster_mapper")
+location = geolocator.geocode("Mira Road, Mumbai, Maharashtra, India")  # mira road ka nhi aaya tha lol
+# print(location.latitude, location.longitude)
+
+dict['Mira Road East'] = {'latitude': location.latitude, 'longitude': location.longitude}
+
 df = pd.read_csv("data_with_clusters.csv")
 df['latitude'] = df['location1'].map(lambda x: dict[x]['latitude'] if x in dict else None)
 df['longitude'] = df['location1'].map(lambda x: dict[x]['longitude']if x in dict else None)
 print(df[['location1', 'latitude', 'longitude']].head())
 df.to_csv("data_with_latitudes_longitudes.csv", index=False)
+

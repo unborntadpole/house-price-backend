@@ -3,7 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 import pandas as pd
-import numpy as np
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+
 
 linear_regression_pipeline = joblib.load("linear_model_pipeline.pkl")
 clusters_df = pd.read_csv("data_with_clusters.csv")
@@ -29,9 +31,17 @@ class HouseFeatures(BaseModel):
     bathrooms: int
     balcony: int
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/map", response_class=HTMLResponse)
+async def serve_map():
+    with open("./static/clusters_map.html", "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
+
+
 @app.get("/")
 def read_root():
-    return {"message": "🏙️ Welcome to the Mumbai Housing API!"}
+    return {"message": "Welcome to the Mumbai Housing API!"}
 
 @app.post("/predict")
 def predict_price(data: HouseFeatures):
