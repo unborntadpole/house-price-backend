@@ -49,7 +49,3 @@ def predict_price(data: HouseFeatures):
     prediction = linear_regression_pipeline.predict(input_df)[0]
     return {"predicted_price_lakhs": round(prediction, 2)}
 
-@app.get("/clusters")
-def get_clusters():
-    summary = clusters_df.groupby("cluster")["location1"].value_counts().reset_index(name="count")
-    return summary.to_dict(orient="records")
