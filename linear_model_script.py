@@ -31,6 +31,6 @@ pipeline.fit(X_train, y_train)
 
 preds = pipeline.predict(X_test)
 rmse = root_mean_squared_error(y_test, preds)
-print(f"RMSE: {rmse:.3f} Lakhs")   # RMSE: 0.938 Lakhs
+print(f"RMSE: {rmse:.3f} Lakhs")   # RMSE: 0.938 crores
 
 joblib.dump(pipeline, "linear_model_pipeline.pkl")
